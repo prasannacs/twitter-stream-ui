@@ -19,11 +19,11 @@ class Rules extends React.Component {
 
   handleRemoveRule(ruleId) {
     console.log('Remove rule ',ruleId);
-    let ruleBody = { delete: { ids : [] } };
+    let ruleBody = { 'delete': { 'ids' : [] } };
     ruleBody.delete.ids.push(ruleId);
     console.log("Rule Value ", JSON.stringify(ruleBody));
-
     this.delTwitterRule(ruleId,ruleBody);
+    console.log('Rule removed');
   }
 
   handleStreaming()  {
@@ -41,7 +41,7 @@ class Rules extends React.Component {
   }
 
   handleAddRule(event) {
-    let ruleBody = { add: [] };
+    let ruleBody = { 'add': [] };
     let tag;
     if( this.state.rules.length > 0 )
       {tag = this.state.rules[0].tag;}
@@ -84,16 +84,21 @@ class Rules extends React.Component {
       .post(ruleURL, ruleBody, options)
       .then((res) => {
         console.log("Rules res ", res.data);
-        let rulesArr = this.state.rules;
-        let removedArr = rulesArr.filter(function(value,index,arr)  {
-          return value.id !== ruleId;
-        })
-        this.setState({ rules: removedArr });
+        // let rulesArr = this.state.rules;
+        // let removedArr = rulesArr.filter(function(value,index,arr)  {
+        //   return value.id !== ruleId;
+        // })
+        // this.setState({ rules: removedArr });
         console.log("Rules array ", this.state.rules);
       })
       .catch(function (error) {
         console.log(error);
       });
+      let rulesArr = this.state.rules;
+      let removedArr = rulesArr.filter(function(value,index,arr)  {
+        return value.id !== ruleId;
+      })
+      this.setState({ rules: removedArr });
   }
 
   handleRuleChange(event) {
@@ -113,6 +118,7 @@ class Rules extends React.Component {
           rules: data,
           dataLoaded: true,
         });
+        console.log('---Rules ',data)
       })
       .catch(function (error) {
         console.log(error);
